@@ -7,7 +7,11 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
+  gtag('event', 'button_click', {
+    'event_category': 'engagement',
+    'event_label': 'My Button',
+    'value': 1234234324
+  });
   gtag('config', 'G-J0JHX3XXZF');
 </script>
     <meta charset="UTF-8">
