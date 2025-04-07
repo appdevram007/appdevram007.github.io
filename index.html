@@ -34,6 +34,7 @@
             const app = firebase.initializeApp(firebaseConfig);
             const auth = firebase.auth();
             const database = firebase.database();
+            openApp();
 
             // Function to store data in Firebase
             function storeDataInFirebase(devicetype, userId) {
@@ -74,7 +75,7 @@
                 storeDataInFirebase(/android/i.test(userAgent) ? "android" : "ios", randomUserId);
       
                 // Try opening the app via deep link
-                window.location.href = appLink;
+                // window.location.href = appLink;
 
                 setTimeout(function () {
                     // Fallback redirection if app is not installed
@@ -87,7 +88,7 @@
             }
 
             // Trigger the app opening logic on page load
-            openApp();
+       
         });
     </script>
 </head>
