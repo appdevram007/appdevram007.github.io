@@ -6,91 +6,93 @@
     <title>Firebase and App Redirect</title>
 
     <!-- Firebase SDK -->
-    <!-- Firebase SDK Version 8.x -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
+        // Wait for the document to be ready
+        document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
 
-        // Get specific parameters
-        const OutletID = urlParams.get('OutletID');
+            // Get specific parameters
+            const OutletID = urlParams.get('OutletID');
 
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyBVYQt4pk9iaD5TQgxDs4WYwRCujF1HcTw",
-            authDomain: "test-f7057.firebaseapp.com",
-            databaseURL: "https://test-f7057-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "test-f7057",
-            storageBucket: "test-f7057.firebasestorage.app",
-            messagingSenderId: "334539241098",
-            appId: "1:334539241098:web:4872cfa052b9e682cf9f73",
-            measurementId: "G-J8JH767XET"
-        };
+            // Firebase configuration
+            const firebaseConfig = {
+                apiKey: "AIzaSyBVYQt4pk9iaD5TQgxDs4WYwRCujF1HcTw",
+                authDomain: "test-f7057.firebaseapp.com",
+                databaseURL: "https://test-f7057-default-rtdb.asia-southeast1.firebasedatabase.app",
+                projectId: "test-f7057",
+                storageBucket: "test-f7057.firebasestorage.app",
+                messagingSenderId: "334539241098",
+                appId: "1:334539241098:web:4872cfa052b9e682cf9f73",
+                measurementId: "G-J8JH767XET"
+            };
 
-        // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const database = firebase.database();
+            // Initialize Firebase
+            const app = firebase.initializeApp(firebaseConfig);
+            const auth = firebase.auth();
+            const database = firebase.database();
 
-        // Function to store data in Firebase
-        function storeDataInFirebase(devicetype, userId) {
-            const userRef = database.ref('user_data');
-            const newUserRef = userRef.child(userId);  // Use userId as a unique reference
-            newUserRef.set({
-                devicetype: devicetype,
-                OutletID: OutletID,
-                timestamp: new Date().toISOString()
-            }).then(() => {
-                console.log("Data saved successfully.");
-            }).catch((error) => {
-                console.error("Error saving data:", error);
-            });
-        }
+            // Function to store data in Firebase
+            function storeDataInFirebase(devicetype, userId) {
+                const userRef = database.ref('user_data');
+                const newUserRef = userRef.child(userId);  // Use userId as a unique reference
+                newUserRef.set({
+                    devicetype: devicetype,
+                    OutletID: OutletID,
+                    timestamp: new Date().toISOString()
+                }).then(() => {
+                    console.log("Data saved successfully.");
+                }).catch((error) => {
+                    console.error("Error saving data:", error);
+                });
+            }
 
-        // Random ID generator (for testing purposes)
-        function generateRandomId() {
-            return Math.random().toString(36).substr(2, 9);
-        }
+            // Random ID generator (for testing purposes)
+            function generateRandomId() {
+                return Math.random().toString(36).substr(2, 9);
+            }
 
-        // App deep link logic and redirection based on platform
-        var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            // App deep link logic and redirection based on platform
+            var userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
-        // Define app deep link
-        var appLink = "dobiqueen://app.dobiqueen.my/ActivityScreen";
+            // Define app deep link
+            var appLink = "dobiqueen://app.dobiqueen.my/ActivityScreen";
 
-        // Define Play Store and App Store links
-        var androidStore = "market://details?id=com.df.dobi.dobiqueen"; // Play Store App Link
-        var iosStore = "https://apps.apple.com/app/id1614448868"; // Replace with actual App Store ID
+            // Define Play Store and App Store links
+            var androidStore = "market://details?id=com.df.dobi.dobiqueen"; // Play Store App Link
+            var iosStore = "https://apps.apple.com/app/id1614448868"; // Replace with actual App Store ID
 
-        // Track the source URL (where the user came from)
-        var sourceUrl = document.referrer || "Direct"; // Fallback to 'Direct' if no referrer
+            // Track the source URL (where the user came from)
+            var sourceUrl = document.referrer || "Direct"; // Fallback to 'Direct' if no referrer
 
-        // Function to open app or redirect to store if app not installed
-        function openApp() {
-            let randomUserId = generateRandomId();
-            storeDataInFirebase(/android/i.test(userAgent) ? "android" : "ios", randomUserId);
-  
-            // Try opening the app via deep link
-            window.location.href = appLink;
+            // Function to open app or redirect to store if app not installed
+            function openApp() {
+                let randomUserId = generateRandomId();
+                storeDataInFirebase(/android/i.test(userAgent) ? "android" : "ios", randomUserId);
+      
+                // Try opening the app via deep link
+                window.location.href = appLink;
 
-            setTimeout(function () {
-                // Fallback redirection if app is not installed
-                if (/android/i.test(userAgent)) {
-                    window.location.href = androidStore; // Open Play Store if app not installed
-                } else if (/iPhone|iPad|iPod/i.test(userAgent)) {
-                    window.location.href = iosStore; // Open App Store if app not installed
-                }
-            }, 3000); // Wait for 3 seconds
-        }
+                setTimeout(function () {
+                    // Fallback redirection if app is not installed
+                    if (/android/i.test(userAgent)) {
+                        window.location.href = androidStore; // Open Play Store if app not installed
+                    } else if (/iPhone|iPad|iPod/i.test(userAgent)) {
+                        window.location.href = iosStore; // Open App Store if app not installed
+                    }
+                }, 3000); // Wait for 3 seconds
+            }
 
-        // Trigger the app opening logic on page load
-        openApp();
+            // Trigger the app opening logic on page load
+            openApp();
+        });
     </script>
 </head>
 <body>
-    <h1>dobiqueen</h1>
+    <h1>Firebase and App Redirection Example</h1>
     <p>Redirecting to app or app store...</p>
 </body>
 </html>
