@@ -2,18 +2,25 @@
 <html lang="en">
 <head>
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-J0JHX3XXZF"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('event', 'button_click', {
-    'event_category': 'engagement',
-    'event_label': 'My Button',
-    'value': 1234234324
-  });
-  gtag('config', 'G-J0JHX3XXZF');
-</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-J0JHX3XXZF"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      // Track the OutletID
+      document.addEventListener("DOMContentLoaded", function() {
+          const urlParams = new URLSearchParams(window.location.search);
+          const OutletID = urlParams.get('OutletID');
+          
+          // Send the event to Google Analytics with the OutletID
+          gtag('event', 'outlet_access', {
+            'event_category': 'outlet_tracking',
+            'event_label': OutletID,
+            'value': 1
+          });
+      });
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Firebase and App Redirect</title>
@@ -86,9 +93,6 @@
             function openApp() {
                 let randomUserId = generateRandomId();
                 storeDataInFirebase(/android/i.test(userAgent) ? "android" : "ios", randomUserId);
-      
-                // Try opening the app via deep link
-                // window.location.href = appLink;
 
                 setTimeout(function () {
                     // Fallback redirection if app is not installed
@@ -101,7 +105,6 @@
             }
 
             // Trigger the app opening logic on page load
-       
         });
     </script>
 </head>
