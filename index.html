@@ -38,7 +38,22 @@
             // Get specific parameters
             const pathSegments = window.location.pathname.split('/');
 const OutletID = pathSegments[pathSegments.length - 1]; // "32"
-           
+           function getMobileOS() {
+  const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+  if (/android/i.test(userAgent)) {
+    return "Android";
+  }
+
+  if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+    return "iOS";
+  }
+
+  return "Other";
+}
+
+// Example usage:
+const deviceOS = getMobileOS();
 
             // Firebase configuration
             const firebaseConfig = {
@@ -63,7 +78,7 @@ const OutletID = pathSegments[pathSegments.length - 1]; // "32"
                 const userRef = database.ref('user_data');
                 const newUserRef = userRef.child(userId);  // Use userId as a unique reference
                 newUserRef.set({
-                    devicetype: devicetype,
+                    devicetype: deviceOS,
                     OutletID: OutletID,
                     timestamp: new Date().toISOString()
                 }).then(() => {
