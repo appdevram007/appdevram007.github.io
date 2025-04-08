@@ -36,7 +36,9 @@
             const urlParams = new URLSearchParams(window.location.search);
 
             // Get specific parameters
-            const OutletID = urlParams.get('OutletID');
+            const pathSegments = window.location.pathname.split('/');
+const OutletID = pathSegments[pathSegments.length - 1]; // "32"
+           
 
             // Firebase configuration
             const firebaseConfig = {
