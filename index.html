@@ -79,7 +79,7 @@
                 const newUserRef = userRef.child(userId);
                 newUserRef.set({
                     devicetype,
-                    devicemodal: phonemodal,
+                
                     OutletID,
                     timestamp: new Date().toISOString()
                 }).then(() => {
