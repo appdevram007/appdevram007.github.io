@@ -80,7 +80,7 @@
                 const phonemodal = "unknown";
                 const userRef = database.ref('user_data');
                 const newUserRef = userRef.child(userId);
-                  FingerprintJS.load().then(fp => {
+                  Fingerprint.load().then(fp => {
             fp.get().then(result => {
                 const uniquser = result.visitorId; // Unique identifier for the user
                 console.log('Visitor ID:', visitorId); // Output to the console
