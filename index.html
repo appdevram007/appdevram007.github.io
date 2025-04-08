@@ -3,6 +3,9 @@
 <head>
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-WXFVESTT5Z"></script>
+        <script async src="https://cdn.jsdelivr.net/npm/fingerprintjs@0.5.3/fingerprint.min.js"></script>
+
+    
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
@@ -77,9 +80,14 @@
                 const phonemodal = "unknown";
                 const userRef = database.ref('user_data');
                 const newUserRef = userRef.child(userId);
+                  FingerprintJS.load().then(fp => {
+            fp.get().then(result => {
+                const uniquser = result.visitorId; // Unique identifier for the user
+                console.log('Visitor ID:', visitorId); // Output to the console
+
                 newUserRef.set({
                     devicetype,
-                
+                uniquser,
                     OutletID,
                     timestamp: new Date().toISOString()
                 }).then(() => {
@@ -87,6 +95,10 @@
                 }).catch((error) => {
                     console.error("Error saving data:", error);
                 });
+            });
+        });
+                
+                
             }
 
             function generateRandomId() {
