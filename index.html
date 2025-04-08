@@ -129,12 +129,13 @@ const deviceOS = getMobileOS();
 
 
 
-            const phonemodal = getPhoneModel();
+    
 
 
 
             
             function storeDataInFirebase(devicetype, userId) {
+                        const phonemodal = getPhoneModel();
                 const userRef = database.ref('user_data');
                 const newUserRef = userRef.child(userId);  // Use userId as a unique reference
                 newUserRef.set({
