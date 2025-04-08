@@ -119,8 +119,9 @@ const deviceOS = getMobileOS();
 
     return "Unknown or Desktop Device";
 }
+            const phonemodal = getPhoneModel();
 
-console.log(getPhoneModel());
+console.log();
 
             
             function storeDataInFirebase(devicetype, userId) {
@@ -128,7 +129,7 @@ console.log(getPhoneModel());
                 const newUserRef = userRef.child(userId);  // Use userId as a unique reference
                 newUserRef.set({
                     devicetype: deviceOS,
-                    devicemodal:getPhoneModel(),
+                    devicemodal:phonemodal,
                     OutletID: OutletID,
                     timestamp: new Date().toISOString()
                 }).then(() => {
