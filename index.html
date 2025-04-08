@@ -23,7 +23,7 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Firebase and App Redirect</title>
+    <title>DBQ</title>
 <style>
     body {
         display: flex;
@@ -104,11 +104,31 @@ const deviceOS = getMobileOS();
             openApp();
 
             // Function to store data in Firebase
+            function getPhoneModel() {
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+    if (/android/i.test(userAgent)) {
+        const modelMatch = userAgent.match(/Android.*;\s([^)]+)/);
+        return modelMatch ? modelMatch[1] : "Android Device";
+    }
+
+    if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        // iPhones don't expose model info directly
+        return "Apple Device (iPhone/iPad)";
+    }
+
+    return "Unknown or Desktop Device";
+}
+
+console.log(getPhoneModel());
+
+            
             function storeDataInFirebase(devicetype, userId) {
                 const userRef = database.ref('user_data');
                 const newUserRef = userRef.child(userId);  // Use userId as a unique reference
                 newUserRef.set({
                     devicetype: deviceOS,
+                    devicemodal:getPhoneModel(),
                     OutletID: OutletID,
                     timestamp: new Date().toISOString()
                 }).then(() => {
