@@ -104,30 +104,6 @@ const deviceOS = getMobileOS();
             openApp();
 
             // Function to store data in Firebase
-    function getPhoneModel() {
-    if (navigator.userAgentData) {
-        // Use User-Agent Client Hints if supported
-        navigator.userAgentData.getHighEntropyValues(["model"]).then(data => {
-            console.log("Model from Client Hints:", data.model || "Unknown");
-        }).catch(() => {
-            console.log("Error with Client Hints. Falling back to userAgent.");
-        });
-    } else {
-        // Fallback to userAgent string if Client Hints isn't available
-        const userAgent = navigator.userAgent;
-        
-        if (/android/i.test(userAgent)) {
-            const modelMatch = userAgent.match(/Android.*;\s([^)]+)/);
-            console.log("Model from UA:", modelMatch ? modelMatch[1] : "Android Device");
-        } else if (/iPad|iPhone|iPod/.test(userAgent)) {
-            console.log("Model from UA: Apple Device (iPhone/iPad)");
-        } else {
-            console.log("Model from UA: Unknown or Desktop Device");
-        }
-    }
-}
-
-
 
     
 
