@@ -6,35 +6,30 @@
     <script src="https://cdn.jsdelivr.net/npm/fingerprintjs@0.5.3/fingerprint.min.js"></script>
 
     <script>
-        // Get the current URL
-        const url = new URL(window.location.href);
+        // Function to fetch OutletID
+        function getOutletID() {
+            const url = new URL(window.location.href);
+            const outletIDFromQuery = url.searchParams.get('OutletID');
+            const outletIDFromPath = window.location.pathname.split('/').pop();
+            return outletIDFromQuery || outletIDFromPath;
+        }
 
-        // Check if the OutletID is in the query parameters
-        const outletIDFromQuery = url.searchParams.get('OutletID');
-
-        // Check if the OutletID is part of the path
-        const outletIDFromPath = window.location.pathname.split('/').pop();
-
-        // Determine which method to use for OutletID
-        const outletID = outletIDFromQuery || outletIDFromPath;
-
-        console.log(outletID); // Outputs the OutletID, either from the query or the path
-
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'G-WXFVESTT5Z');
-
-        document.addEventListener("DOMContentLoaded", function () {
-            const deviceOS = getMobileOS();
+        // Function to initialize Google Analytics
+        function initializeAnalytics(outletID) {
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
+            gtag('config', 'G-WXFVESTT5Z');
 
             gtag('event', 'outlet_access', {
                 'event_category': 'outlet_tracking',
                 'event_label': outletID,
                 'value': 1
             });
+        }
 
-            // Initialize Firebase
+        // Function to initialize Firebase
+        function initializeFirebase() {
             const firebaseConfig = {
                 apiKey: 'AIzaSyBVYQt4pk9iaD5TQgxDs4WYwRCujF1HcTw',
                 authDomain: 'test-f7057.firebaseapp.com',
@@ -47,57 +42,75 @@
             };
 
             const app = firebase.initializeApp(firebaseConfig);
-            const database = firebase.database();
+            return firebase.database();
+        }
 
-            // Function to store data in Firebase
-            function storeDataInFirebase(devicetype, userId) {
-                const fingerprint = new Fingerprint().get();
-                const userRef = database.ref('user_data');
-                const newUserRef = userRef.child(userId);
+        // Function to store data in Firebase
+        function storeDataInFirebase(outletID, deviceOS, userId) {
+            const fingerprint = new Fingerprint().get();
+            const database = initializeFirebase();
+            const userRef = database.ref('user_data');
+            const newUserRef = userRef.child(userId);
 
-                newUserRef.set({
-                    devicetype,
-                    fingerprint: fingerprint,
-                    OutletID: outletID,
-                    timestamp: new Date().toISOString()
-                }).then(() => {
-                    console.log("Data saved successfully.");
-                }).catch((error) => {
-                    console.error("Error saving data:", error);
-                });
-            }
+            newUserRef.set({
+                devicetype: deviceOS,
+                fingerprint: fingerprint,
+                OutletID: outletID,
+                timestamp: new Date().toISOString()
+            }).then(() => {
+                console.log("Data saved successfully.");
+            }).catch((error) => {
+                console.error("Error saving data:", error);
+            });
+        }
 
-            function generateRandomId() {
-                return Math.random().toString(36).substr(2, 9);
-            }
+        // Function to generate random user ID
+        function generateRandomId() {
+            return Math.random().toString(36).substr(2, 9);
+        }
 
-            function getMobileOS() {
+        // Function to get device OS
+        function getMobileOS() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            if (/android/i.test(userAgent)) return "Android";
+            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) return "iOS";
+            return "Desktop/Laptop";
+        }
+
+        // Function to handle app redirection
+        function openApp() {
+            const userId = generateRandomId();
+            const deviceOS = getMobileOS();
+            const outletID = getOutletID();
+
+            // Store data in Firebase
+            storeDataInFirebase(outletID, deviceOS, userId);
+
+            // Redirect based on device OS
+            setTimeout(function () {
                 const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-                if (/android/i.test(userAgent)) return "Android";
-                if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) return "iOS";
-                return "Desktop/Laptop";
+                const androidStore = "market://details?id=com.df.dobi.dobiqueen";
+                const iosStore = "https://apps.apple.com/app/id1614448868";
+
+                if (/android/i.test(userAgent)) {
+                    window.location.href = androidStore;
+                } else if (/iPhone|iPad|iPod/i.test(userAgent)) {
+                    window.location.href = iosStore;
+                } else {
+                    window.location.href = "https://www.dobiqueen.my/app";
+                }
+            }, 3000);
+        }
+
+        // Event listener for page load
+        document.addEventListener("DOMContentLoaded", function () {
+            const outletID = getOutletID();
+            if (outletID) {
+                initializeAnalytics(outletID);
+                openApp();
+            } else {
+                console.error("OutletID not found in the URL");
             }
-
-            function openApp() {
-                const userId = generateRandomId();
-                storeDataInFirebase(deviceOS, userId);
-
-                setTimeout(function () {
-                    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-                    const androidStore = "market://details?id=com.df.dobi.dobiqueen";
-                    const iosStore = "https://apps.apple.com/app/id1614448868";
-
-                    if (/android/i.test(userAgent)) {
-                        window.location.href = androidStore;
-                    } else if (/iPhone|iPad|iPod/i.test(userAgent)) {
-                        window.location.href = iosStore;
-                    } else {
-                         window.location.href = "https://www.dobiqueen.my/app";
-                    }
-                }, 3000);
-            }
-
-            openApp();
         });
     </script>
     
