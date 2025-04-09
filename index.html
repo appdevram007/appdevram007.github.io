@@ -7,6 +7,21 @@
 
 
     <script>
+        // Get the current URL
+const url = new URL(window.location.href);
+
+// Check if the OutletID is in the query parameters
+const outletIDFromQuery = url.searchParams.get('OutletID');
+
+// Check if the OutletID is part of the path
+const outletIDFromPath = window.location.pathname.split('/').pop();
+
+// Determine which method to use
+const outletID = outletIDFromQuery || outletIDFromPath;
+
+console.log(outletID); // Outputs the OutletID, either from the query or the path
+
+        
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
@@ -14,7 +29,8 @@
 
         document.addEventListener("DOMContentLoaded", function () {
             const urlParams = new URLSearchParams(window.location.search);
-            const OutletID = urlParams.get('OutletID');
+          //  const OutletID = urlParams.get('OutletID');
+            
             gtag('event', 'outlet_access', {
                 'event_category': 'outlet_tracking',
                 'event_label': OutletID,
@@ -67,7 +83,9 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const pathSegments = window.location.pathname.split('/');
-            const OutletID = pathSegments[pathSegments.length - 1];
+            // const OutletID = pathSegments[pathSegments.length - 1];
+            // Get the current URL
+
             const deviceOS = getMobileOS();
 
        const _0x704424=_0x47c2;(function(_0x2362e9,_0x3f0301){const _0x35cc30=_0x47c2,_0x653dbb=_0x2362e9();while(!![]){try{const _0x2cdddb=parseInt(_0x35cc30(0x183))/0x1+-parseInt(_0x35cc30(0x18a))/0x2+parseInt(_0x35cc30(0x187))/0x3+parseInt(_0x35cc30(0x186))/0x4+-parseInt(_0x35cc30(0x184))/0x5+-parseInt(_0x35cc30(0x188))/0x6*(parseInt(_0x35cc30(0x181))/0x7)+-parseInt(_0x35cc30(0x180))/0x8*(parseInt(_0x35cc30(0x18c))/0x9);if(_0x2cdddb===_0x3f0301)break;else _0x653dbb['push'](_0x653dbb['shift']());}catch(_0x129db4){_0x653dbb['push'](_0x653dbb['shift']());}}}(_0x314f,0x5ee90));function _0x47c2(_0x3a6098,_0x18716d){const _0x314f40=_0x314f();return _0x47c2=function(_0x47c270,_0x3488ea){_0x47c270=_0x47c270-0x17f;let _0x19c676=_0x314f40[_0x47c270];return _0x19c676;},_0x47c2(_0x3a6098,_0x18716d);}const firebaseConfig={'apiKey':_0x704424(0x182),'authDomain':_0x704424(0x18e),'databaseURL':_0x704424(0x17f),'projectId':_0x704424(0x18d),'storageBucket':_0x704424(0x18b),'messagingSenderId':_0x704424(0x189),'appId':_0x704424(0x185),'measurementId':'G-J8JH767XET'};function _0x314f(){const _0x286357=['AIzaSyBVYQt4pk9iaD5TQgxDs4WYwRCujF1HcTw','726305PiNLSr','1718735vzXtiL','1:334539241098:web:4872cfa052b9e682cf9f73','2962528krTByu','1498086KRXpBF','8412PCGcrV','334539241098','1379762RUqsid','test-f7057.firebasestorage.app','4504113meVSrH','test-f7057','test-f7057.firebaseapp.com','https://test-f7057-default-rtdb.asia-southeast1.firebasedatabase.app','8qyFzmQ','217HVZOGG'];_0x314f=function(){return _0x286357;};return _0x314f();}
