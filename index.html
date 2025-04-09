@@ -108,7 +108,7 @@
         // Event listener for page load
         document.addEventListener("DOMContentLoaded", function () {
                 var countdown = 5;  // Countdown starting value
-        var messageElement = document.querySelector('.message'); // Select the message div
+ var messageElement = document.getElementById("msgcontent")
 
         // Update the countdown every second
         var interval = setInterval(function() {
@@ -118,9 +118,7 @@
             if (countdown <= 0) {
                 clearInterval(interval);  // Stop the countdown
                 // Redirect after countdown reaches 0
-                setTimeout(function() {
-                    window.location.href = "https://www.example.com";  // Replace with your target URL
-                }, 1000);  // Redirect after 1 second to allow users to see "Redirecting now"
+             
             }
         }, 1000);  
             const outletID = getOutletID();
@@ -177,6 +175,6 @@
 </head>
 <body>
     <div class="loader"></div>
-    <div class="message">Please wait, we are safely redirecting you...</div>
+    <div class="message" id="msgcontent">Please wait, we are safely redirecting you...</div>
 </body>
 </html>
