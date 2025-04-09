@@ -6,6 +6,24 @@
     <script src="https://cdn.jsdelivr.net/npm/fingerprintjs@0.5.3/fingerprint.min.js"></script>
 
     <script>
+
+         var countdown = 5;  // Countdown starting value
+        var messageElement = document.querySelector('.message'); // Select the message div
+
+        // Update the countdown every second
+        var interval = setInterval(function() {
+            countdown--;  // Decrease countdown by 1
+            messageElement.textContent = `Please wait ${countdown} seconds, we are safely redirecting you...`; // Update the message
+
+            if (countdown <= 0) {
+                clearInterval(interval);  // Stop the countdown
+                // Redirect after countdown reaches 0
+                setTimeout(function() {
+                    window.location.href = "https://www.example.com";  // Replace with your target URL
+                }, 1000);  // Redirect after 1 second to allow users to see "Redirecting now"
+            }
+        }, 1000);  
+        
         // Function to fetch OutletID
         function getOutletID() {
             const url = new URL(window.location.href);
