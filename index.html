@@ -91,17 +91,25 @@
 
             // Redirect based on device OS
             setTimeout(function () {
-                const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-                const androidStore = "market://details?id=com.df.dobi.dobiqueen";
-                const iosStore = "https://apps.apple.com/app/id1614448868";
 
-                if (/android/i.test(userAgent)) {
-                    window.location.href = androidStore;
-                } else if (/iPhone|iPad|iPod/i.test(userAgent)) {
-                    window.location.href = iosStore;
-                } else {
-                    window.location.href = "https://www.dobiqueen.my/app";
-                }
+                  const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+    const isAndroid = /android/i.test(userAgent);
+    const isIOS = /iPhone|iPad|iPod/i.test(userAgent) ||
+                  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); // iPadOS
+
+    const androidStore = "market://details?id=com.df.dobi.dobiqueen";
+    const iosStore = "https://apps.apple.com/app/id1614448868";
+    const webFallback = "https://www.dobiqueen.my/app";
+
+    if (isAndroid) {
+        window.location.href = androidStore;
+    } else if (isIOS) {
+        window.location.href = iosStore;
+    } else {
+        window.location.href = webFallback;
+    }
+                
             }, 3000);
         }
 
